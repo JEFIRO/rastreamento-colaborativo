@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: collaborative-tracking
+    restart: unless-stopped
+    ports:
+      - "5157:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: collaborative-tracking
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
