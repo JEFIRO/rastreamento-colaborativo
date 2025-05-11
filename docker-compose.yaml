@@ -13,5 +13,27 @@ services:
       POSTGRES_DB: collaborative-tracking
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - tracking-network
+
+  app:
+    build: .
+    container_name: collaborative-tracking-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/collaborative-tracking
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - tracking-network
+
 volumes:
   pgdata:
+
+networks:
+  tracking-network:
+    driver: bridge
