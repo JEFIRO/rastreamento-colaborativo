@@ -32,4 +32,6 @@ public class LocationController {
         return ResponseEntity.ok(service.findLocation(id));
     }
 
+
+
 }

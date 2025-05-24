@@ -41,8 +41,8 @@ public class UserController {
         var userDetails = (UserModel) auth.getPrincipal();
 
         var token = tokenService.genereteToken(userDetails);
-
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        var user = repository.findById(((UserModel) auth.getPrincipal()).get_id()).get();
+        return ResponseEntity.ok(new LoginResponseDTO(token, new UserSumaryDTO(user)));
     }
 
     @PostMapping("/signup")
@@ -59,7 +59,7 @@ public class UserController {
         device.setUserModel(user);
         device.setTracker(tracker);
 
-        tracker.setDeviceModel(device); // <- se relacionamento bidirecional com tracker
+        tracker.setDeviceModel(device);
 
         user.setDevices(List.of(device));
 
