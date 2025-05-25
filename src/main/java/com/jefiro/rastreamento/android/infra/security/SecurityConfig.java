@@ -32,6 +32,7 @@ public class SecurityConfig {
                         auth.requestMatchers(HttpMethod.POST, "/auth/v1/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/tracker/post").permitAll()
                                 .requestMatchers("/tracker/**").authenticated()
+                        .requestMatchers("/tracker/cad/").authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

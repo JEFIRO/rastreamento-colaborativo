@@ -16,8 +16,14 @@ public class TrackerModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String _id;
+
+    @Column(unique = true)
     private String trackerId;
     private String type;
+
+    private String redeName;
+    private String redePassword;
+    private String deviceId;
 
     @OneToOne(mappedBy = "tracker")
     private DeviceModel deviceModel;

@@ -57,4 +57,7 @@ public class LocationService {
     public List<LocationResponseDTO> findAll(String id) {
         return locationRepository.findByDevice_DeviceId(id).stream().map(LocationResponseDTO::new).toList();
     }
+
+
+
 }
