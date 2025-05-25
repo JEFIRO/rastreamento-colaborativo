@@ -42,7 +42,7 @@ public class UserController {
 
         var token = tokenService.genereteToken(userDetails);
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, new UserSumaryDTO(userDetails)));
     }
 
     @PostMapping("/signup")

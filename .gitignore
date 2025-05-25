@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/java/com/jefiro/rastreamento/android/Model/GeolocateApi/GoogleGeolocationService.java

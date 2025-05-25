@@ -1,7 +1,7 @@
 package com.jefiro.rastreamento.android.infra.exception;
 
 public class RequestNullException extends RuntimeException {
-    public RequestNullException() {
+    public RequestNullException(String s) {
         super("This request is null");
     }
 }

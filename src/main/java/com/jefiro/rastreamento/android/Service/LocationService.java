@@ -2,6 +2,8 @@ package com.jefiro.rastreamento.android.Service;
 
 import com.jefiro.rastreamento.android.Model.DTO.LocationRequestDTO;
 import com.jefiro.rastreamento.android.Model.DTO.LocationResponseDTO;
+import com.jefiro.rastreamento.android.Model.GeolocateApi.GoogleGeolocationService;
+import com.jefiro.rastreamento.android.Model.GeolocateApi.WrapperLocate;
 import com.jefiro.rastreamento.android.Model.LocationModel;
 import com.jefiro.rastreamento.android.Repository.DeviceRepository;
 import com.jefiro.rastreamento.android.Repository.LocationRepository;
@@ -19,19 +21,33 @@ public class LocationService {
     @Autowired
     LocationRepository locationRepository;
 
-    public void newLocation(LocationRequestDTO date) {
-        if (date == null) {
-            throw new RequestNullException();
+    @Autowired
+    GoogleGeolocationService geolocationService;
+
+    public void newLocation(WrapperLocate date) {
+        if (date == null || date.locationRequestDTO() == null || date.wifiListDTO() == null) {
+            throw new RequestNullException("Dados da localização estão incompletos.");
         }
 
+        if (locationRepository.findByIdLocate(date.locationRequestDTO().idLocate()).isPresent()) {
+            throw new IllegalStateException("Localização já registrada.");
+        }
 
-        var device = repository.findByDeviceIdAndTracker_TrackerId(date.deviceMacAddress(), date.trackerId()).orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado."));
+        var device = repository.findByDeviceIdAndTracker_TrackerId(
+                date.locationRequestDTO().deviceMacAddress(),
+                date.locationRequestDTO().trackerId()
+        ).orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado."));
 
+        var response = geolocationService.getLocation(date.wifiListDTO()).block();
 
-        LocationModel location = new LocationModel(device, date);
+        if (response == null) {
+            throw new IllegalStateException("Não foi possível obter localização da API.");
+        }
 
+        LocationModel location = new LocationModel(device, response, date);
         locationRepository.save(location);
     }
+
 
     public LocationResponseDTO findLocation(String id) {
         var location = locationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Localização não encontrada."));

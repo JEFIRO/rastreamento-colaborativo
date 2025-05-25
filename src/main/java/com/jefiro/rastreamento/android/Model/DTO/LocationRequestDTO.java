@@ -1,12 +1,8 @@
 package com.jefiro.rastreamento.android.Model.DTO;
 
-import java.time.LocalDateTime;
-
 public record LocationRequestDTO(
+        String idLocate,
         String deviceMacAddress,
         String trackerId,
-        double latitude,
-        double longitude,
-        LocalDateTime timestamp,
         Integer rssi) {
 }
